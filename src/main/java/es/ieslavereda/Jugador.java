@@ -7,42 +7,42 @@ public class Jugador {
     private Carta[] mano;
     public Jugador (String Nombre){
         this.nombre = Nombre;
+        this.mano=new Carta[0];
     }
 
     public void cartaNueva (Carta carta){
         mano= Arrays.copyOf(mano,mano.length+1);
         mano[mano.length-1]=carta;
     }
-    private int getPuntuacion(){
+    public int getPuntuacion(){
         int punt=0;
         int as1 =0;
         for (Carta carta:mano) {
-            if (punt>21){
-                punt = 0;
-                for (Carta carta2:mano) {
-                    if (carta2.getNumero().getTypeOf()=="A"){
-                        punt += (carta2.getNumero().getValor()[0]);
-                    }else {
-                        punt += (carta2.getNumero().getValor()[0]);
-                    }
-                }
-            }else {
-                if (carta.getNumero().getTypeOf()=="A"){
-                    if (as1>=1){
-                        punt += (carta.getNumero().getValor()[0]);
-                    }else {
-                        punt += (carta.getNumero().getValor()[1]);
-                    }
-                    as1++;
-                }else {
+            if (carta.getNumero().getTypeOf()=="A"){
+                if (as1>=1){
                     punt += (carta.getNumero().getValor()[0]);
+                }else {
+                    punt += (carta.getNumero().getValor()[1]);
                 }
+                as1++;
+            }else {
+                punt += (carta.getNumero().getValor()[0]);
             }
         }
-        return punt;
+        if (punt>21 && as1>=1){
+            punt=0;
+            for (Carta carta:mano) {
+                punt += (carta.getNumero().getValor()[0]);
+            }
+        }
+        return (punt>21?-1:punt);
     }
     public Carta[] getMano() {
         return mano;
+    }
+
+    public String getNombre() {
+        return nombre;
     }
 
     @Override
